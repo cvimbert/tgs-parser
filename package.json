@@ -1,0 +1,32 @@
+{
+  "name": "tgs-parser",
+  "version": "1.0.0",
+  "description": "Text Game Structure file parser",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc && tsc -w",
+    "lite": "lite-server",
+    "tsc": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cvimbert/tgs-parser.git"
+  },
+  "author": "cvimbert",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cvimbert/tgs-parser/issues"
+  },
+  "homepage": "https://github.com/cvimbert/tgs-parser#readme",
+  "devDependencies": {
+    "@types/core-js": "^2.5.0",
+    "concurrently": "^4.1.0",
+    "lite-server": "^2.4.0",
+    "systemjs": "^3.0.0",
+    "ts-loader": "^5.3.3",
+    "typescript": "^3.3.3",
+    "webpack": "^4.29.5"
+  },
+  "dependencies": {}
+}
