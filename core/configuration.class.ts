@@ -1,5 +1,7 @@
 export class Configuration {
 
+  comment: RegExp = /^\s\/\/*$/;
+
   unities: Object = {
     rawText: {
       expression: /([A-Za-z0-9-]+)/,

@@ -1,0 +1,63 @@
+/*Une proposition de language destiné à la structuration d'un récit interactif
+
+Système de scripting:
+- script au démarrage d'une séquence
+- script au démarrage d'un bloc
+
+Un script:
+- Mise à jour d'une variable
+- Exécution d'une commande in-game
+- Définition d'une condition*/
+
+@script {
+  global GLOB1.TRUC = "chaine"
+  local LOC1 = 67
+
+  // une variable peut être définie au niveau global (tout le jeu)
+  // ou simplement au niveau local (la séquence)
+  // opérateurs :
+  // = assignation forcée
+  // *= assignation uniquement si la valeur n'est pas définie (utile ?)
+}
+
+#ident1
+<tempo duration="200">
+<format size="25">
+Bloc de texte
+Suite du bloc de texte
+Affichage d'une variable % GLOB1.TRUC % au sein d'une ligne
+// commentaire
+[(condition2)
+  Texte conditionnel 1
+  @command commandName arg1 arg2
+  Potentiellement sur plusieurs lignes
+  [(condition3)
+    Et récursif
+  ] // et les tabulations en début de ligne sont ignorées
+]
+
+Double interlignage pour saut de ligne. Un interlignage simple est considéré comme un
+simple espace
+
+Encore du texte
+*Proposition1 => #ident2
+*Proposition2 => sequence1#ident3
+*(condition1)Proposition3 => ident4
+
+#ident2
+Texte du bloc ident2
+
+#ident3
+Texte du bloc ident3
+
+#ident4
+texte du bloc ident4
+
+
+\ = suppression des sauts de lignes suivants et précédents
+
+#b1
+Bien, nous y voilà... Les choses sont ce qu'elles sont, et il fallait bien s'attendre
+à ce que le vent tourne.
+
+Un jour ou l'autre, c'est bien ce qu'il fait, non ?
