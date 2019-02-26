@@ -1,6 +1,6 @@
 export class Configuration {
 
-  comment: RegExp = /^\s\/\/*$/;
+  comment: RegExp = /^\s*\/\/*$/;
 
   unities: Object = {
     rawText: {
