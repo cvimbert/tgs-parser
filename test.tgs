@@ -1,0 +1,17 @@
+@start {
+  instruction1;
+  instruction2;
+}
+
+#block1
+Texte du bloc
+*Proposition1 => #block2
+*Texte de proposition 2 => #block3
+
+#block2
+Texte du bloc 2
+*Retour 1 => #block1
+
+#block3
+Texte du bloc 3
+*Retour 1 => #block1

@@ -1,8 +1,19 @@
 export class Configuration {
 
-  comment: RegExp = /^\s*\/\/*$/;
+  static comment: RegExp = /\/\/()*$/;
 
-  unities: Object = {
+  comments: Object = {
+    commentedLine: {
+      expression: /\/\/(*)$/,
+      groups: ["text"]
+    },
+    commentedBlock: {
+      expression: /\/\*(*)\*\//,
+      groups: ["text"]
+    }
+  }
+
+  static unities: Object = {
     rawText: {
       expression: /([A-Za-z0-9-]+)/,
       groups: ["value"]
@@ -16,7 +27,35 @@ export class Configuration {
     }
   }
 
-  configuration: Object = {
+  static identifier: RegExp = /([A-Za-z0-9-]+)/;
+
+  static scriptObject: Object = {
+    type: "and", // équivalent du ET logique
+    assertions: [
+      {
+        expression: /\@([A-Za-z0-9-]+)\s*\{/,
+        groups: ["name"],
+      },
+      {
+        reference: "instruction",
+        iterator: "*"
+      },
+      {
+        expression: /\s*\}/
+      }
+    ]
+  }
+
+  static instruction: Object = {
+    type: "or", // équivalent du OU logique
+    assertions: [
+      {
+        
+      }
+    ]
+  }
+
+  static configuration: Object = {
     // énumeration des objets définissant la structure du langage de script
     t1: {
       sub1: {
