@@ -8,7 +8,8 @@
     "start": "tsc && tsc -w",
     "lite": "lite-server",
     "tsc": "tsc",
-    "build": "webpack"
+    "build": "webpack --watch --watch-poll --progress",
+    "dev": "webpack-dev-server --watch"
   },
   "repository": {
     "type": "git",
@@ -22,13 +23,15 @@
   "homepage": "https://github.com/cvimbert/tgs-parser#readme",
   "devDependencies": {
     "@types/core-js": "^2.5.0",
+    "case-sensitive-paths-webpack-plugin": "^2.2.0",
     "concurrently": "^4.1.0",
     "lite-server": "^2.4.0",
     "systemjs": "^3.0.0",
     "ts-loader": "^5.3.3",
     "typescript": "^3.3.3",
     "webpack": "^4.29.5",
-    "webpack-cli": "^3.2.3"
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.2.1"
   },
   "dependencies": {}
 }

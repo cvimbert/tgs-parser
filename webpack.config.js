@@ -1,27 +1,38 @@
-/**
- * Created by Christophe on 25/10/2017.
- */
 var webpack = require("webpack");
 var path = require("path");
 
 module.exports = {
     mode: "development",
-    entry: './test.ts',
+    entry: path.join(__dirname, './index.ts'),
+    watch: true,
+    watchOptions: {
+      ignored: 'node_modules'
+    },
+      devServer: {
+      contentBase: path.join(__dirname, '.'),
+      port: 9000
+    },
+    plugins: [
+
+    ],
     output: {
         filename: "./tgs-parser.umd.js",
         libraryTarget: 'umd',
         library: "TGSParser"
     },
     resolve: {
-        extensions: [".webpack.js", ".web.js", ".js", ".ts"],
+        extensions: [".js", ".ts"],
         alias: {
-          core: path.resolve(__dirname, 'core/'),
+          //core: path.resolve(__dirname, 'core/'),
         }
     },
     module: {
       rules: [
-    // all files with a `.ts` or `.tsx` extension will be handled by `ts-loader`
-        { test: /\.tsx?$/, loader: "ts-loader" }
+        {
+          test: /\.tsx?$/,
+          loader: "ts-loader",
+          exclude: /node_modules/
+        }
       ]
     }
 

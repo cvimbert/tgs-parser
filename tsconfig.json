@@ -13,7 +13,7 @@
       "../node_modules/@types"
     ],
     "types": [
-      "core-js"
+      
     ],
     "lib": ["es2017", "dom"],
     "baseUrl": ".",

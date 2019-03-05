@@ -1,33 +1,173 @@
 import { ParsingResult } from "./parsing-result.class";
+import { ParserConfiguration } from "./data-interfaces/parser-configuration.interface";
+import { Configuration } from "./configuration.class";
+import { AssertionsGroup } from "./data-interfaces/assertions-group.interface";
+import { AssertionsGroupType } from "./enums/assertions-group-type.enum";
+import { Assertion } from "./data-interfaces/assertion.interface";
 
 export class TGSParser {
 
-  constructor() {
+  private configuration: ParserConfiguration = Configuration.mainConfiguration;
+  private parsedText: string;
 
+  constructor() {
+    let exp = /\s*ab(.*)ab/;
+    console.log(exp.exec("kkkk      abcoucouab"));
+    //console.log("integrity", this.verifyConfigurationIntegrity());
   }
 
-  loadTGSFile(filePath: string): void {
+  loadTGSFile(filePath: string): Promise<ParsingResult[]> {
 
-    // voir l'utilisation des promises
-    /*let completionPromise: Promise<boolean> = new Promise<boolean>(() => {
-      return true;
-    });*/
+    return new Promise<ParsingResult[]>((resolve: Function, reject: Function) => {
+      let req: XMLHttpRequest = new XMLHttpRequest();
+      req.open("GET", filePath);
+      req.send();
 
-    let req: XMLHttpRequest = new XMLHttpRequest();
-    req.open("GET", filePath);
-    req.send();
+      req.onreadystatechange = () => {
+        if (req.readyState === XMLHttpRequest.DONE) {
+          if (req.status === 200) {
+            resolve(this.parseTGSString(req.responseText));
+          } else {
+            reject();
+          }
+        }
+      };
+    });
+  }
 
-    req.onreadystatechange = () => {
-      if (req.readyState === XMLHttpRequest.DONE) {
-        if (req.status === 200) {
-          console.log(req.responseText);
+  parseTGSString(text: string): ParsingResult[] {
+    return this.parseStringAt(text, this.configuration.entry);
+  }
+
+  parseStringAt(text: string, dictionaryTerm: string, index: number = 0): ParsingResult[] {
+    let group: AssertionsGroup = this.configuration.dictionary[dictionaryTerm];
+    let subString: string = text.substring(index);
+
+    // on parcourt chacune des assertions du groupe. Si l'une des assertions est ok
+    // (elle retourne un tableau de ParsingResult non null, on continue, récursivement)
+
+    if (group.type === AssertionsGroupType.AND) {
+      // pour étre évalué comme vrai, toutes les assertions du groupes devront avoir une évaluation positive
+      // le résultat sera alors un tableau des différents résultats (un par assertion)
+      let results: ParsingResult[] = [];
+
+      for (let assertion of group.assertions) {
+        let res: ParsingResult[] = this.evaluateAssertion(text, assertion, index);
+
+        if (res) {
+          // temporairement
+          console.log("parseStringAt -> 1");
+          results.push(...res);
+        } else {
+          console.log("parseStringAt -> 2");
+          return null;
         }
       }
-    };
+
+      return results;
+
+    } else if (group.type === AssertionsGroupType.OR) {
+      // un seul résultat, le premier positif de la liste (évaluation dans l'ordre du tableau)
+
+      for (let assertion of group.assertions) {
+        let res: ParsingResult[] = this.evaluateAssertion(text, assertion, index);
+        return res;
+      }
+
+      // aucun résultat
+      return null;
+
+    } else {
+      // pas de type, donc une seule assertion possible dans le groupe. Sinon erreur.
+      if (group.assertions.length !== 1) {
+        console.error(`No type for group: "${ dictionaryTerm }". One and only one assertion required.`);
+      }
+
+      return this.evaluateAssertion(text, group.assertions[0], index);
+    }
   }
 
+  evaluateAssertion(text: string, assertion: Assertion, index: number = 0): ParsingResult[] {
+    // cas d'itération: * (0 et plus), + (1 et plus), ? (0 ou 1), et defaut (1)
+    let subRes: ParsingResult[] = [];
 
-  parseTGSString(text: string): ParsingResult {
+    let currentRes: ParsingResult = this.evaluateAssertionIteration(text, assertion, index);
+
+    if (!currentRes && (assertion.iterator === "?" || assertion.iterator === "*")) {
+      return [];
+    }
+
+    if (!currentRes && assertion.iterator === "+") {
+      return null;
+    }
+
+    while (currentRes) {
+      subRes.push(currentRes);
+      currentRes = this.evaluateAssertionIteration(text, assertion, currentRes.index);
+
+      if (currentRes && (!assertion.iterator || assertion.iterator === "?")) {
+        return null;
+      }
+    }
+
+    return subRes;
+  }
+
+  evaluateAssertionIteration(text: string, assertion: Assertion, index: number): ParsingResult {
+    let croppedText: string = text.substring(index);
+
+    if (assertion.expression) {
+
+      let regExpAdditions: string = "^";
+
+      if (assertion.stripStartSpaces) {
+        regExpAdditions += "\s*";
+      }
+
+      let exp = new RegExp(regExpAdditions + assertion.expression.source);
+
+      let expRes: RegExpExecArray = exp.exec(croppedText);
+
+      if (expRes) {
+        let newIndex: number = index + expRes[0].length;
+        let res = new ParsingResult(assertion.id, newIndex);
+
+        for (let i = 1; i < expRes.length; i++) {
+          res.addGroupResult(assertion.groups[i - 1], expRes[i]);
+        }
+
+        return res;
+
+      } else {
+        return null;
+      }
+
+    } else if (assertion.reference) {
+      let targetResults: ParsingResult[] = this.parseStringAt(text, assertion.reference, index);
+      let lastIndex: number = targetResults[targetResults.length - 1].index;
+      let res = new ParsingResult(assertion.id || assertion.reference, lastIndex);
+      res.addResults(assertion.reference, targetResults);
+      return res;
+    }
+
     return null;
+  }
+
+  verifyConfigurationIntegrity(): boolean {
+    if (!this.configuration.dictionary[this.configuration.entry]) {
+      console.warn(`Entry: "${this.configuration.entry}" unknown in syntax dictionary`);
+      return false;
+    }
+
+    for (let dicKey in this.configuration.dictionary) {
+      for (let assertion of this.configuration.dictionary[dicKey].assertions) {
+        if (assertion.reference && !this.configuration.dictionary[assertion.reference]) {
+          console.warn(`Unknown key "${assertion.reference}" in syntax dictionary`);
+          return false;
+        }
+      }
+    }
+
+    return true;
   }
 }

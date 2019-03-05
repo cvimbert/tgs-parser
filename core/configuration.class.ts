@@ -1,81 +1,115 @@
+import { ParserConfiguration } from "./data-interfaces/parser-configuration.interface";
+import { AssertionsGroupType } from "./enums/assertions-group-type.enum";
+
 export class Configuration {
 
-  static comment: RegExp = /\/\/()*$/;
-
-  comments: Object = {
-    commentedLine: {
-      expression: /\/\/(*)$/,
-      groups: ["text"]
-    },
-    commentedBlock: {
-      expression: /\/\*(*)\*\//,
-      groups: ["text"]
-    }
-  }
-
-  static unities: Object = {
-    rawText: {
-      expression: /([A-Za-z0-9-]+)/,
-      groups: ["value"]
-    },
-    sectionIdentifier: {
-      expression: /#([A-Za-z0-9-]+)/, // ou un array d'expressions ?
-      groups: ["name"]
-    },
-    sectionId2: {
-      expression: [/#/, "sectionIdentifier"]
-    }
-  }
-
-  static identifier: RegExp = /([A-Za-z0-9-]+)/;
-
-  static scriptObject: Object = {
-    type: "and", // équivalent du ET logique
-    assertions: [
+  static mainConfiguration: ParserConfiguration = {
+    comments: [
       {
-        expression: /\@([A-Za-z0-9-]+)\s*\{/,
-        groups: ["name"],
+        id: "commentedLine",
+        expression: /\/\/(.*)$/,
+        groups: ["text"]
       },
       {
-        reference: "instruction",
-        iterator: "*"
-      },
-      {
-        expression: /\s*\}/
+        id: "commentedBlock",
+        expression: /\/\*(.*)\*\//,
+        groups: ["text"]
       }
-    ]
-  }
-
-  static instruction: Object = {
-    type: "or", // équivalent du OU logique
-    assertions: [
-      {
-        
-      }
-    ]
-  }
-
-  static configuration: Object = {
-    // énumeration des objets définissant la structure du langage de script
-    t1: {
-      sub1: {
-        list: [
+    ],
+    dictionary: {
+      mainFileStructure: {
+        type: AssertionsGroupType.AND,
+        assertions: [
           {
-            id: "e1",
-            expression: /ok/,
-            groups: ["g1", "g2"],
-            iteration: "*" // ou +, ?, voir un autre itérateur d'expression régulière
+            id: "scripts",
+            reference: "script",
+            iterator: "*"
           },
-          'idRef' // peut être une interface aussi
+          {
+            id: "gameBlocks",
+            reference: "gameBlock",
+            iterator: "*"
+          }
         ]
       },
-      sub2: {
-
+      script: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+          {
+            id: "scriptOpener",
+            expression: /^\@([A-Za-z0-9-]+)\s*\{/,
+            groups: ["scriptId"]
+          },
+          {
+            id: "instructions",
+            reference: "instruction",
+            iterator: "*"
+          },
+          {
+            id: "scriptCloser",
+            expression: /^\s*\}/,
+          }
+        ]
+      },
+      instruction: {
+        assertions: [
+          {
+            id: "simpleInstruction",
+            expression: /[A-Za-z0-9-]+;/
+          }
+        ]
+      },
+      gameBlock: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+          {
+            id: "blockId", // si pas d'id, le nom de la réference est utilisé à la place
+            reference: "blockId"
+          },
+          {
+            id: "blockLines",
+            reference: "blockLine",
+            iterator: "*"
+          },
+          {
+            id: "blockLinks",
+            reference: "blockLink",
+            iterator: "*"
+          }
+        ]
+      },
+      blockId: {
+        assertions: [
+          {
+            id: "blockId",
+            expression: /\#([A-Za-z0-9-]+)/,
+            groups: ["id"]
+          }
+        ]
+      },
+      blockLine: {
+        assertions: [
+          {
+            id: "simpleLine",
+            expression: /^.*$/
+          }
+        ]
+      },
+      blockLink: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+          {
+            id: "simpleLinkText",
+            expression: /\*(.*)\s*=>\s*/,
+            groups: ["text"]
+          },
+          {
+            id: "linkId",
+            reference: "blockId"
+          }
+        ]
       }
     },
-    t2: {
-
-    }
+    entry: "blockId"
   }
-
 }
