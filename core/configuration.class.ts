@@ -63,7 +63,7 @@ export class Configuration {
         type: AssertionsGroupType.AND,
         assertions: [
           {
-            id: "blockId", // si pas d'id, le nom de la réference est utilisé à la place
+            id: "blockId",
             reference: "blockId"
           },
           {
@@ -110,6 +110,6 @@ export class Configuration {
         ]
       }
     },
-    entry: "blockId"
+    entry: "blockLink"
   }
 }

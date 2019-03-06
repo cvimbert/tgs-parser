@@ -11,8 +11,8 @@ export class TGSParser {
   private parsedText: string;
 
   constructor() {
-    let exp = /\s*ab(.*)ab/;
-    console.log(exp.exec("kkkk      abcoucouab"));
+    /*let exp = /\s*ab(.*)ab/;
+    console.log(exp.exec("kkkk      abcoucouab"));*/
     //console.log("integrity", this.verifyConfigurationIntegrity());
   }
 
@@ -39,6 +39,10 @@ export class TGSParser {
     return this.parseStringAt(text, this.configuration.entry);
   }
 
+  parseStringAtEntryPoint() {
+
+  }
+
   parseStringAt(text: string, dictionaryTerm: string, index: number = 0): ParsingResult[] {
     let group: AssertionsGroup = this.configuration.dictionary[dictionaryTerm];
     let subString: string = text.substring(index);
@@ -54,12 +58,13 @@ export class TGSParser {
       for (let assertion of group.assertions) {
         let res: ParsingResult[] = this.evaluateAssertion(text, assertion, index);
 
+        //let yep = text.substring(index);
+
         if (res) {
+          index = res[res.length - 1].index;
           // temporairement
-          console.log("parseStringAt -> 1");
           results.push(...res);
         } else {
-          console.log("parseStringAt -> 2");
           return null;
         }
       }
@@ -83,7 +88,13 @@ export class TGSParser {
         console.error(`No type for group: "${ dictionaryTerm }". One and only one assertion required.`);
       }
 
-      return this.evaluateAssertion(text, group.assertions[0], index);
+      let res: ParsingResult[] = this.evaluateAssertion(text, group.assertions[0], index);
+
+      if (res && res.length > 0) {
+        index = res ? res[0].index : index;
+      }
+
+      return res;
     }
   }
 
@@ -92,6 +103,10 @@ export class TGSParser {
     let subRes: ParsingResult[] = [];
 
     let currentRes: ParsingResult = this.evaluateAssertionIteration(text, assertion, index);
+
+    if (!currentRes) {
+      return null;
+    }
 
     if (!currentRes && (assertion.iterator === "?" || assertion.iterator === "*")) {
       return [];
@@ -130,7 +145,7 @@ export class TGSParser {
 
       if (expRes) {
         let newIndex: number = index + expRes[0].length;
-        let res = new ParsingResult(assertion.id, newIndex);
+        let res = new ParsingResult(assertion.id , newIndex);
 
         for (let i = 1; i < expRes.length; i++) {
           res.addGroupResult(assertion.groups[i - 1], expRes[i]);
@@ -144,10 +159,15 @@ export class TGSParser {
 
     } else if (assertion.reference) {
       let targetResults: ParsingResult[] = this.parseStringAt(text, assertion.reference, index);
-      let lastIndex: number = targetResults[targetResults.length - 1].index;
-      let res = new ParsingResult(assertion.id || assertion.reference, lastIndex);
-      res.addResults(assertion.reference, targetResults);
-      return res;
+
+      if (targetResults) {
+        let lastIndex: number = targetResults.length > 0 ? targetResults[targetResults.length - 1].index : index;
+        let res = new ParsingResult(assertion.id || assertion.reference, lastIndex);
+        res.addResults(assertion.id || assertion.reference, targetResults);
+        return res;
+      }
+
+      return null;
     }
 
     return null;
@@ -167,6 +187,8 @@ export class TGSParser {
         }
       }
     }
+
+    // on doit aussi vérifier qu'il n'y a pas deux fois le même id dans un groupe d'assertions
 
     return true;
   }

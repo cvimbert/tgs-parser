@@ -4,6 +4,7 @@ export class ParsingResult {
   results: {[key: string]: ParsingResult[]} = {};
 
   constructor(
+    // pas certain que l'id soit vraiment utile
     public id: string,
     public index: number
   ) {}
@@ -13,7 +14,15 @@ export class ParsingResult {
   }
 
   addResults(assertionName: string, results: ParsingResult[]) {
-    results[assertionName] = results;
+    this.results[assertionName] = results;
+    /*if (!this.results[assertionName]) {
+      this.results[assertionName] = [];
+    }
+
+    results.forEach(res => {
+      this.results
+    });*/
+
   }
 
   addResult(assertionName: string, result: ParsingResult) {

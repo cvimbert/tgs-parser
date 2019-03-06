@@ -1,5 +1,5 @@
 export interface Assertion {
-  id?: string;
+  id: string;
   expression?: RegExp;
   groups?: string[];
   reference?: string;
