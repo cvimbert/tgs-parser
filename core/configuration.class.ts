@@ -37,7 +37,7 @@ export class Configuration {
         assertions: [
           {
             id: "scriptOpener",
-            expression: /^\@([A-Za-z0-9-]+)\s*\{/,
+            expression: /@([A-Za-z0-9]+)\s*\{/,
             groups: ["scriptId"]
           },
           {
@@ -47,7 +47,7 @@ export class Configuration {
           },
           {
             id: "scriptCloser",
-            expression: /^\s*\}/,
+            expression: /\}/,
           }
         ]
       },
@@ -55,7 +55,7 @@ export class Configuration {
         assertions: [
           {
             id: "simpleInstruction",
-            expression: /[A-Za-z0-9-]+;/
+            expression: /[A-Za-z0-9]+;/
           }
         ]
       },
@@ -75,6 +75,10 @@ export class Configuration {
             id: "blockLinks",
             reference: "blockLink",
             iterator: "*"
+          },
+          {
+            id: "closer",
+            expression: /###/
           }
         ]
       },
@@ -91,7 +95,9 @@ export class Configuration {
         assertions: [
           {
             id: "simpleLine",
-            expression: /^.*$/
+            // temp
+            expression: /(?!###|\s*\*)\s*(.*)\n/,
+            groups: ["text"]
           }
         ]
       },
@@ -108,8 +114,17 @@ export class Configuration {
             reference: "blockId"
           }
         ]
+      },
+      entry: {
+        assertions: [
+          {
+            id: "start",
+            reference: "script",
+            iterator: "*"
+          }
+        ]
       }
     },
-    entry: "blockLink"
+    entry: "mainFileStructure"
   }
 }
