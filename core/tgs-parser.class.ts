@@ -8,12 +8,9 @@ import { Assertion } from "./data-interfaces/assertion.interface";
 export class TGSParser {
 
   private configuration: ParserConfiguration = Configuration.mainConfiguration;
-  private parsedText: string;
 
   constructor() {
-    /*let exp = /\s*ab(.*)ab/;
-    console.log(exp.exec("kkkk      abcoucouab"));*/
-    //console.log("integrity", this.verifyConfigurationIntegrity());
+
   }
 
   loadTGSFile(filePath: string): Promise<ParsingResult> {
@@ -36,7 +33,10 @@ export class TGSParser {
   }
 
   parseTGSString(text: string): ParsingResult {
-    return this.parseStringAt(text, this.configuration.entry);
+    let startTime: number = Date.now();
+    let res: ParsingResult = this.parseStringAt(text, this.configuration.entry);
+    console.log("Evaluated in " + (Date.now() - startTime) + "ms");
+    return res;
   }
 
   parseStringAt(text: string, dictionaryTerm: string, index: number = 0): ParsingResult {
@@ -55,8 +55,6 @@ export class TGSParser {
 
       for (let assertion of group.assertions) {
         let res: ParsingResult[] = this.evaluateAssertion(text, assertion, index);
-
-        //let yep = text.substring(index);
 
         if (res) {
           index = res.length > 0 ? res[res.length - 1].index : index;
@@ -78,20 +76,17 @@ export class TGSParser {
     } else if (group.type === AssertionsGroupType.OR) {
       // un seul résultat, le premier positif de la liste (évaluation dans l'ordre du tableau)
 
-      // tout le bloc OR est à revoir
-
       for (let assertion of group.assertions) {
         let res: ParsingResult[] = this.evaluateAssertion(text, assertion, index);
 
         if (res) {
           if (res.length > 0) {
             globalResult.addResults(assertion.id, res);
+            globalResult.index = res[res.length - 1].index;
           }
 
-          globalResult.index = res[res.length - 1].index;
+          return globalResult;
         }
-
-        return globalResult;
       }
 
       // aucun résultat
@@ -122,12 +117,7 @@ export class TGSParser {
   evaluateAssertion(text: string, assertion: Assertion, index: number = 0): ParsingResult[] {
     // cas d'itération: * (0 et plus), + (1 et plus), ? (0 ou 1), et defaut (1)
     let subRes: ParsingResult[] = [];
-
     let currentRes: ParsingResult = this.evaluateAssertionIteration(text, assertion, index);
-
-    /*if (!currentRes) {
-      return null;
-    }*/
 
     if (assertion.iterator === "?" || assertion.iterator === "*") {
       if (!currentRes) {
@@ -139,7 +129,10 @@ export class TGSParser {
       return null;
     }
 
+    let count: number = 0;
+
     while (currentRes) {
+      //console.log("ici");
       subRes.push(currentRes);
 
       if (assertion.iterator === "*" || assertion.iterator === "+") {
@@ -147,7 +140,6 @@ export class TGSParser {
 
         let lastIndex: number = currentRes.index;
         currentRes = this.evaluateAssertionIteration(text, assertion, currentRes.index);
-        //index = currentRes.index;
 
         if (currentRes && currentRes.index === lastIndex) {
           // erreur bizarre de redondance de l'index. A voir
@@ -156,9 +148,16 @@ export class TGSParser {
       } else {
         break;
       }
+
+      count++;
+
+      // une petite sécurité qui ne devrait pas être nécessaire
+      if (count > 100) {
+        console.log("exit !!");
+        break;
+      }
     }
 
-    //console.log("sub", subRes);
     return subRes;
   }
 
@@ -168,10 +167,7 @@ export class TGSParser {
     if (assertion.expression) {
 
       let regExpAdditions: string = "^";
-
-      //if (assertion.stripStartSpaces) {
-        regExpAdditions += "\\s*";
-      //}
+      regExpAdditions += "\\s*";
 
       let exp = new RegExp(regExpAdditions + assertion.expression.source);
 
@@ -181,8 +177,10 @@ export class TGSParser {
         let newIndex: number = index + expRes[0].length;
         let res = new ParsingResult(newIndex);
 
-        for (let i = 1; i < expRes.length; i++) {
-          res.addGroupResult(assertion.groups[i - 1], expRes[i]);
+        if (assertion.groups) {
+          for (let i = 1; i < expRes.length; i++) {
+            res.addGroupResult(assertion.groups[i - 1], expRes[i]);
+          }
         }
 
         return res;
@@ -193,19 +191,8 @@ export class TGSParser {
 
     } else if (assertion.reference) {
 
-
-      // voir laquelle de ces deux versions est la plus judicieuse
       let targetResult: ParsingResult = this.parseStringAt(text, assertion.reference, index);
-
       return targetResult;
-
-      /*if (targetResult) {
-        let res = new ParsingResult(targetResult.index);
-        res.addResults(assertion.id || assertion.reference, [targetResult]);
-        return res;
-      }*/
-
-      //return null;
     }
 
     return null;

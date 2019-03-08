@@ -44,8 +44,6 @@ export class ParsingResult {
 
   getResultsByArray(splittedPath: string[], index: number = 0): ParsingResult[] {
 
-    //console.log(splittedPath);
-
     let pathElem: string = splittedPath[index];
     let currentRes: ParsingResult[] = this.getResultsAtKey(pathElem);
 

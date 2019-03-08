@@ -1,7 +1,10 @@
 import { ParserConfiguration } from "./data-interfaces/parser-configuration.interface";
 import { AssertionsGroupType } from "./enums/assertions-group-type.enum";
+import { ScriptElements } from "./language-elements/script-elements.class";
 
 export class Configuration {
+
+  yo = ScriptElements.test;
 
   static mainConfiguration: ParserConfiguration = {
     comments: [
@@ -68,7 +71,7 @@ export class Configuration {
           },
           {
             id: "blockLines",
-            reference: "blockLine",
+            reference: "complexTextBlock",
             iterator: "*"
           },
           {
@@ -86,18 +89,110 @@ export class Configuration {
         assertions: [
           {
             id: "blockId",
-            expression: /\#([A-Za-z0-9-]+)/,
+            expression: /\#([A-Za-z0-9]+)/,
             groups: ["id"]
+          }
+        ]
+      },
+      link: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+          {
+            id: "globalRef",
+            expression: /([A-Za-z0-9/]+)/,
+            groups: ["ref"],
+            iterator: "?"
+          },
+          {
+            id: "localRef",
+            reference: "blockId"
           }
         ]
       },
       blockLine: {
         assertions: [
           {
-            id: "simpleLine",
+            id: "blockline",
             // temp
-            expression: /(?!###|\s*\*)\s*(.*)\n/,
+            expression: /(?!###|\s*\*|\s*\])\s*(.*)\n/,
             groups: ["text"]
+          }
+        ]
+      },
+      condition: {
+        assertions: [
+          {
+            id: "tempCondition",
+            expression: /([A-Za-z0-9]+)/,
+            groups: ["conditionId"]
+          }
+        ]
+      },
+      logicalOperator: {
+        type: AssertionsGroupType.OR,
+        assertions: [
+          {
+            id: "equalsTo",
+            expression: /==/
+          },
+          {
+            id: "differentOf",
+            expression: /!=/
+          },
+          {
+            id: "superiorTo",
+            expression: /\>/
+          },
+          {
+            id: "inferiorTo",
+            expression: /\</
+          },
+          {
+            id: "superiorOrEqualsTo",
+            expression: /\>=/
+          },
+          {
+            id: "inferiorOrEqualsTo",
+            expression: /\<=/
+          }
+        ]
+      },
+      conditionalBlock: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+          {
+            id: "opener",
+            expression: /\[\(/
+          },
+          {
+            id: "condition",
+            reference: "condition"
+          },
+          {
+            id: "conditionCloser",
+            expression: /\)/
+          },
+          {
+            id: "blocks",
+            reference: "complexTextBlock",
+            iterator: "*"
+          },
+          {
+            id: "closer",
+            expression: /\]/
+          }
+        ]
+      },
+      complexTextBlock: {
+        type: AssertionsGroupType.OR,
+        assertions: [
+          {
+            id: "conditionalBlock",
+            reference: "conditionalBlock"
+          },
+          {
+            id: "simpleLine",
+            reference: "blockLine"
           }
         ]
       },
