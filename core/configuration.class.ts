@@ -201,12 +201,12 @@ export class Configuration {
         assertions: [
           {
             id: "simpleLinkText",
-            expression: /\*(.*)\s*=>\s*/,
+            expression: /\*\s*(.*)\s*=>\s*/,
             groups: ["text"]
           },
           {
-            id: "linkId",
-            reference: "blockId"
+            id: "link",
+            reference: "link"
           }
         ]
       },
