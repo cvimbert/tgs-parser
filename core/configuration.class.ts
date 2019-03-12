@@ -110,11 +110,12 @@ export class Configuration {
         ]
       },
       blockLine: {
+        type: AssertionsGroupType.OR,
         assertions: [
           {
             id: "blockline",
             // temp
-            expression: /(?!###|\s*\*|\s*\])\s*(.*)\n/,
+            expression: /(?!###|\s*\*|\s*\])[\t ]*(.*)\n/,
             groups: ["text"]
           }
         ]
