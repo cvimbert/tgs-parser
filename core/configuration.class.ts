@@ -121,15 +121,53 @@ export class Configuration {
         ]
       },
       condition: {
+        type: AssertionsGroupType.OR,
         assertions: [
           {
-            id: "tempCondition",
+            id: "comparison",
+            reference: "booleanExpression"
+          },
+          {
+            id: "conditionName",
             expression: /([A-Za-z0-9]+)/,
             groups: ["conditionId"]
           }
         ]
       },
-      logicalOperator: {
+      booleanExpression: {
+        type: AssertionsGroupType.OR,
+        assertions: [
+          {
+            id: "comparison",
+            reference: "comparison"
+          },
+          {
+            id: "boolean",
+            expression: /(true|false)/,
+            groups: ["value"]
+          },
+          {
+            id: "variable",
+            reference: "variable"
+          }
+        ]
+      },
+      variable: {
+        assertions: [
+          {
+            id: "variableName",
+            expression: /([A-Za-z0-9\.]+)/,
+            groups: ["name"]
+          }
+        ]
+      },
+      comparison: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+
+        ]
+      },
+      comparisonOperator: {
         type: AssertionsGroupType.OR,
         assertions: [
           {
