@@ -62,6 +62,25 @@ export class ParsingResult {
     }
   }
 
+  getFirstKey(path: string = null): string {
+    if (!path) {
+      if (this.results) {
+        return Object.keys(this.results)[0];
+      }
+    } else {
+      // à terminer
+      //return this.getFirstValue(path)
+    }
+  }
+
+  getFirstResult(path: string): ParsingResult {
+    return this.getResults(path)[0];
+  }
+
+  getFirstValue(path: string): string {
+    return this.getValue(path)[0];
+  }
+
   getValue(path: string): string[] {
 
     if (path.indexOf("@") === -1) {

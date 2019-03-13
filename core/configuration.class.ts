@@ -124,8 +124,8 @@ export class Configuration {
         type: AssertionsGroupType.OR,
         assertions: [
           {
-            id: "comparison",
-            reference: "booleanExpression"
+            id: "booleanValue",
+            reference: "booleanValue"
           },
           {
             id: "conditionName",
@@ -134,17 +134,17 @@ export class Configuration {
           }
         ]
       },
-      booleanExpression: {
+      booleanValue: {
         type: AssertionsGroupType.OR,
         assertions: [
-          {
-            id: "comparison",
-            reference: "comparison"
-          },
           {
             id: "boolean",
             expression: /(true|false)/,
             groups: ["value"]
+          },
+          {
+            id: "comparison",
+            reference: "comparison"
           },
           {
             id: "variable",
@@ -161,10 +161,69 @@ export class Configuration {
           }
         ]
       },
+      comparisonMember: {
+        type: AssertionsGroupType.OR,
+        assertions: [
+          {
+            id: "boolean",
+            reference: "booleanRawValue"
+          },
+          {
+            id: "number",
+            reference: "numberRawValue"
+          },
+          {
+            id: "string",
+            reference: "stringRawValue"
+          },
+          {
+            id: "variable",
+            reference: "variable"
+          }
+        ]
+      },
+      booleanRawValue: {
+        assertions: [
+          {
+            id: "value",
+            expression: /(true|false)/,
+            groups: ["value"]
+          }
+        ]
+      },
+      numberRawValue: {
+        assertions: [
+          {
+            id: "value",
+            expression: /([0-9]+(?:\.[0-9]+)?)/,
+            groups: ["value"]
+          }
+        ]
+      },
+      stringRawValue: {
+        assertions: [
+          {
+            id: "value",
+            expression: /"([A-Za-z0-9]*)"/,
+            groups: ["value"]
+          }
+        ]
+      },
       comparison: {
         type: AssertionsGroupType.AND,
         assertions: [
-
+          {
+            id: "operand1",
+            reference: "comparisonMember"
+          },
+          {
+            id: "operator",
+            reference: "comparisonOperator"
+          },
+          {
+            id: "operand2",
+            reference: "comparisonMember"
+          }
         ]
       },
       comparisonOperator: {
