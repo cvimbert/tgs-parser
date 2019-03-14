@@ -1,22 +1,17 @@
 import { ParserConfiguration } from "./data-interfaces/parser-configuration.interface";
 import { AssertionsGroupType } from "./enums/assertions-group-type.enum";
-import { ScriptElements } from "./language-elements/script-elements.class";
 
 export class Configuration {
-
-  yo = ScriptElements.test;
 
   static mainConfiguration: ParserConfiguration = {
     comments: [
       {
         id: "commentedLine",
-        expression: /\/\/(.*)$/,
-        groups: ["text"]
+        expression: /\/\/.*\n/g
       },
       {
         id: "commentedBlock",
-        expression: /\/\*(.*)\*\//,
-        groups: ["text"]
+        expression: /\/\*.*\*\//gs
       }
     ],
     dictionary: {
@@ -298,13 +293,39 @@ export class Configuration {
         type: AssertionsGroupType.AND,
         assertions: [
           {
+            id: "opener",
+            expression: /\*/
+          },
+          {
+            id: "condition",
+            reference: "conditionInParenthesis",
+            iterator: "?"
+          },
+          {
             id: "simpleLinkText",
-            expression: /\*\s*(.*)\s*=>\s*/,
+            expression: /(.*)\s*=>/,
             groups: ["text"]
           },
           {
             id: "link",
             reference: "link"
+          }
+        ]
+      },
+      conditionInParenthesis: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+          {
+            id: "opener",
+            expression: /\(/
+          },
+          {
+            id: "conditionBody",
+            reference: "condition",
+          },
+          {
+            id: "closer",
+            expression: /\)/
           }
         ]
       },

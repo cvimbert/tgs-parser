@@ -74,11 +74,13 @@ export class ParsingResult {
   }
 
   getFirstResult(path: string): ParsingResult {
-    return this.getResults(path)[0];
+    let results: ParsingResult[] = this.getResults(path);
+    return results ? results[0] : null;
   }
 
   getFirstValue(path: string): string {
-    return this.getValue(path)[0];
+    let values: string[] = this.getValue(path);
+    return values ? values[0] : null;
   }
 
   getValue(path: string): string[] {

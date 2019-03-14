@@ -33,6 +33,12 @@ export class TGSParser {
   }
 
   parseTGSString(text: string): ParsingResult {
+
+    // comments stripping
+    this.configuration.comments.forEach(assertion => {
+      text = text.replace(assertion.expression, "");
+    });
+
     let startTime: number = Date.now();
     let res: ParsingResult = this.parseStringAt(text, this.configuration.entry);
     console.log("Evaluated in " + (Date.now() - startTime) + "ms");
