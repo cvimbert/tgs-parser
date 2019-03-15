@@ -35,8 +35,92 @@ export class Configuration {
         assertions: [
           {
             id: "scriptOpener",
-            expression: /@([A-Za-z0-9]+)\s*\{/,
+            expression: /@([A-Za-z0-9]+)/,
             groups: ["scriptId"]
+          },
+          {
+            id: "commandsGroup",
+            reference: "commandsGroup"
+          }
+        ]
+      },
+      instruction: {
+        type: AssertionsGroupType.OR,
+        assertions: [
+          {
+            id: "commandWithArgs",
+            reference: "commandWithArgs"
+          },
+          {
+            id: "if",
+            reference: "if"
+          }
+        ]
+      },
+      commandWithArgs: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+          {
+            id: "command",
+            expression: /([A-Za-z0-9]+)/,
+            groups: ["name"]
+          },
+          {
+            id: "arguments",
+            reference: "basicArgument",
+            iterator: "*"
+          },
+          {
+            id: "closer",
+            expression: /;/
+          }
+        ]
+      },
+      if: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+          {
+            id: "opener",
+            expression: /if\s*\(/
+          },
+          {
+            id: "condition",
+            reference: "condition"
+          },
+          {
+            id: "closer",
+            expression: /\)/
+          },
+          {
+            id: "commandsGroup",
+            reference: "commandsGroup"
+          },
+          {
+            id: "else",
+            reference: "else",
+            iterator: "?"
+          }
+        ]
+      },
+      else: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+          {
+            id: "opener",
+            expression: /else/
+          },
+          {
+            id: "commandsGroup",
+            reference: "commandsGroup"
+          }
+        ]
+      },
+      commandsGroup: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+          {
+            id: "opener",
+            expression: /\{/
           },
           {
             id: "instructions",
@@ -44,16 +128,8 @@ export class Configuration {
             iterator: "*"
           },
           {
-            id: "scriptCloser",
-            expression: /\}/,
-          }
-        ]
-      },
-      instruction: {
-        assertions: [
-          {
-            id: "simpleInstruction",
-            expression: /[A-Za-z0-9]+;/
+            id: "closer",
+            expression: /\}/
           }
         ]
       },
@@ -109,7 +185,7 @@ export class Configuration {
         assertions: [
           {
             id: "blockline",
-            // temp
+            // temp (ungreedy)
             expression: /(?!###|\s*\*|\s*\])[\t ]*(.*)\n/,
             groups: ["text"]
           }
@@ -177,6 +253,27 @@ export class Configuration {
           }
         ]
       },
+      basicArgument: {
+        type: AssertionsGroupType.OR,
+        assertions: [
+          {
+            id: "boolean",
+            reference: "booleanRawValue"
+          },
+          {
+            id: "number",
+            reference: "numberRawValue"
+          },
+          {
+            id: "string",
+            reference: "stringRawValue"
+          },
+          {
+            id: "variable",
+            reference: "variable"
+          }
+        ]
+      },
       booleanRawValue: {
         assertions: [
           {
@@ -199,7 +296,7 @@ export class Configuration {
         assertions: [
           {
             id: "value",
-            expression: /"([A-Za-z0-9]*)"/,
+            expression: /"(.*?)"/,
             groups: ["value"]
           }
         ]
