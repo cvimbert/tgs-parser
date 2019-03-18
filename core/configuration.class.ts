@@ -377,6 +377,16 @@ export class Configuration {
         type: AssertionsGroupType.OR,
         assertions: [
           {
+            id: "formatOpener",
+            expression: /\<([A-Za-z0-9]+)\>/,
+            groups: ["name"]
+          },
+          {
+            id: "formatCloser",
+            expression: /\<\/([A-Za-z0-9]+)\>/,
+            groups: ["name"]
+          },
+          {
             id: "conditionalBlock",
             reference: "conditionalBlock"
           },
