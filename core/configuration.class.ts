@@ -7,7 +7,7 @@ export class Configuration {
     comments: [
       {
         id: "commentedLine",
-        expression: /\/\/.*?\n/g
+        expression: /\/\/.*?[\r\n]/g
       },
       {
         id: "commentedBlock",
@@ -191,7 +191,7 @@ export class Configuration {
           {
             id: "blockline",
             // exp bizarre
-            expression: /(?!###|\s*\*|\s*\])(.+?)(?=[\n\[\]])/,
+            expression: /(?!###|\s*\*|\s*\])(.+?)(?=[\n\r\[\]])/,
             groups: ["text"]
           }
         ]
