@@ -185,8 +185,8 @@ export class Configuration {
         assertions: [
           {
             id: "blockline",
-            // temp (ungreedy)
-            expression: /(?!###|\s*\*|\s*\])[\t ]*(.*)\n/,
+            // exp bizarre
+            expression: /(?!###|\s*\*|\s*\])(.+?)(?=[\n\[])/,
             groups: ["text"]
           }
         ]
@@ -352,15 +352,18 @@ export class Configuration {
         assertions: [
           {
             id: "opener",
-            expression: /\[\(/
+            expression: /\[/
           },
           {
             id: "condition",
-            reference: "condition"
+            reference: "conditionInParenthesis",
+            iterator: "*"
           },
           {
-            id: "conditionCloser",
-            expression: /\)/
+            id: "format",
+            expression: /\<([A-Za-z0-9]+)\>/,
+            groups: ["name"],
+            iterator: "*"
           },
           {
             id: "blocks",
@@ -376,16 +379,6 @@ export class Configuration {
       complexTextBlock: {
         type: AssertionsGroupType.OR,
         assertions: [
-          {
-            id: "formatOpener",
-            expression: /\<([A-Za-z0-9]+)\>/,
-            groups: ["name"]
-          },
-          {
-            id: "formatCloser",
-            expression: /\<\/([A-Za-z0-9]+)\>/,
-            groups: ["name"]
-          },
           {
             id: "conditionalBlock",
             reference: "conditionalBlock"
