@@ -7,11 +7,11 @@ export class Configuration {
     comments: [
       {
         id: "commentedLine",
-        expression: /\/\/.*\n/g
+        expression: /\/\/.*?\n/g
       },
       {
         id: "commentedBlock",
-        expression: /\/\*.*\*\//gs
+        expression: /\/\*.*?\*\//g
       }
     ],
     dictionary: {
@@ -35,7 +35,7 @@ export class Configuration {
         assertions: [
           {
             id: "scriptOpener",
-            expression: /@([A-Za-z0-9]+)/,
+            expression: /@([A-Za-z0-9]*)/,
             groups: ["scriptId"]
           },
           {
@@ -141,6 +141,11 @@ export class Configuration {
             reference: "blockId"
           },
           {
+            id: "scripts",
+            reference: "script",
+            iterator: "*"
+          },
+          {
             id: "blockLines",
             reference: "complexTextBlock",
             iterator: "*"
@@ -186,7 +191,7 @@ export class Configuration {
           {
             id: "blockline",
             // exp bizarre
-            expression: /(?!###|\s*\*|\s*\])(.+?)(?=[\n\[])/,
+            expression: /(?!###|\s*\*|\s*\])(.+?)(?=[\n\[\]])/,
             groups: ["text"]
           }
         ]
@@ -347,6 +352,25 @@ export class Configuration {
           }
         ]
       },
+      formats: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+          {
+            id: "opener",
+            expression: /\</
+          },
+          {
+            id: "formatsList",
+            expression: /([A-Za-z0-9]+)/,
+            groups: ["name"],
+            iterator: "*"
+          },
+          {
+            id: "closer",
+            expression: /\>/
+          }
+        ]
+      },
       conditionalBlock: {
         type: AssertionsGroupType.AND,
         assertions: [
@@ -357,13 +381,12 @@ export class Configuration {
           {
             id: "condition",
             reference: "conditionInParenthesis",
-            iterator: "*"
+            iterator: "?"
           },
           {
             id: "format",
-            expression: /\<([A-Za-z0-9]+)\>/,
-            groups: ["name"],
-            iterator: "*"
+            reference: "formats",
+            iterator: "?"
           },
           {
             id: "blocks",
