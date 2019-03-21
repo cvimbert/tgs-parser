@@ -35,7 +35,7 @@ export class Configuration {
         assertions: [
           {
             id: "scriptOpener",
-            expression: /@([A-Za-z0-9]*)/,
+            expression: /([A-Za-z0-9]*)/,
             groups: ["scriptId"]
           },
           {
@@ -182,6 +182,34 @@ export class Configuration {
           {
             id: "localRef",
             reference: "blockId"
+          }
+        ]
+      },
+      elementTag: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+          {
+            id: "tagName",
+            expression: /\<\@([A-Za-z0-9]+)/,
+            groups: ["name"]
+          },
+          {
+            id: "attributes",
+            reference: "elementAttribute",
+            iterator: "+"
+          },
+          {
+            id: "closer",
+            expression: /\>/
+          }
+        ]
+      },
+      elementAttribute: {
+        assertions: [
+          {
+            id: "attribute",
+            expression: /([A-Za-z0-9]+)="(.*?)"/,
+            groups: ["attributeName", "attributeValue"]
           }
         ]
       },
@@ -363,7 +391,7 @@ export class Configuration {
             id: "formatsList",
             expression: /([A-Za-z0-9]+)/,
             groups: ["name"],
-            iterator: "*"
+            iterator: "+"
           },
           {
             id: "closer",
@@ -405,6 +433,10 @@ export class Configuration {
           {
             id: "conditionalBlock",
             reference: "conditionalBlock"
+          },
+          {
+            id: "tag",
+            reference: "elementTag"
           },
           {
             id: "simpleLine",
