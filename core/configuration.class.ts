@@ -35,7 +35,7 @@ export class Configuration {
         assertions: [
           {
             id: "scriptOpener",
-            expression: /([A-Za-z0-9]*)/,
+            expression: /@([A-Za-z0-9]*)/,
             groups: ["scriptId"]
           },
           {
@@ -190,7 +190,7 @@ export class Configuration {
         assertions: [
           {
             id: "tagName",
-            expression: /\<\@([A-Za-z0-9]+)/,
+            expression: /\<([A-Za-z0-9]+)/,
             groups: ["name"]
           },
           {

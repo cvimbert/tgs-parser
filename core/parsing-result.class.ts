@@ -96,9 +96,11 @@ export class ParsingResult {
     let res: ParsingResult[] = this.getResults(pathElem);
     let groupsRes: string[] = [];
 
-    res.forEach(elem => {
-      groupsRes.push(elem.getValueAtKey(resName));
-    });
+    if (res) {
+      res.forEach(elem => {
+        groupsRes.push(elem.getValueAtKey(resName));
+      });
+    }
 
     return groupsRes;
   }
