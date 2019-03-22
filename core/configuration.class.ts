@@ -185,13 +185,41 @@ export class Configuration {
           }
         ]
       },
+      elementTag: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+          {
+            id: "tagName",
+            expression: /\<([A-Za-z0-9]+)/,
+            groups: ["name"]
+          },
+          {
+            id: "attributes",
+            reference: "elementAttribute",
+            iterator: "+"
+          },
+          {
+            id: "closer",
+            expression: /\>/
+          }
+        ]
+      },
+      elementAttribute: {
+        assertions: [
+          {
+            id: "attribute",
+            expression: /([A-Za-z0-9]+)="(.*?)"/,
+            groups: ["attributeName", "attributeValue"]
+          }
+        ]
+      },
       blockLine: {
         type: AssertionsGroupType.OR,
         assertions: [
           {
             id: "blockline",
             // exp bizarre
-            expression: /(?!###|\s*\*|\s*\])(.+?)(?=[\n\r\[\]])/,
+            expression: /(?!###|\s*\*|\s*\]|\s*\>)(.+?)(?=[\n\r\[\]\<\>])/,
             groups: ["text"]
           }
         ]
@@ -363,7 +391,7 @@ export class Configuration {
             id: "formatsList",
             expression: /([A-Za-z0-9]+)/,
             groups: ["name"],
-            iterator: "*"
+            iterator: "+"
           },
           {
             id: "closer",
@@ -405,6 +433,10 @@ export class Configuration {
           {
             id: "conditionalBlock",
             reference: "conditionalBlock"
+          },
+          {
+            id: "tag",
+            reference: "elementTag"
           },
           {
             id: "simpleLine",
