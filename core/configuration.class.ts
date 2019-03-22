@@ -219,7 +219,7 @@ export class Configuration {
           {
             id: "blockline",
             // exp bizarre
-            expression: /(?!###|\s*\*|\s*\])(.+?)(?=[\n\r\[\]])/,
+            expression: /(?!###|\s*\*|\s*\]|\s*\>)(.+?)(?=[\n\r\[\]\<\>])/,
             groups: ["text"]
           }
         ]
