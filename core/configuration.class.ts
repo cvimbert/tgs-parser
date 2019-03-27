@@ -54,6 +54,41 @@ export class Configuration {
           {
             id: "if",
             reference: "if"
+          },
+          {
+            id: "assignation",
+            reference: "assignation"
+          }
+        ]
+      },
+      assignation: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+          {
+            id: "variable",
+            reference: "variable"
+          },
+          {
+            id: "operator",
+            reference: "assignationOperator"
+          },
+          {
+            id: "value",
+            reference: "comparisonMember",
+            iterator: "?"
+          },
+          {
+            id: "closer",
+            expression: /;/
+          }
+        ]
+      },
+      assignationOperator: {
+        type: AssertionsGroupType.OR,
+        assertions: [
+          {
+            id: "equals",
+            expression: /=/
           }
         ]
       },
