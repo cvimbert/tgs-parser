@@ -19,6 +19,11 @@ export class Configuration {
         type: AssertionsGroupType.AND,
         assertions: [
           {
+            id: "conditions",
+            reference: "conditionDeclaration",
+            iterator: "*"
+          },
+          {
             id: "scripts",
             reference: "script",
             iterator: "*"
@@ -27,6 +32,24 @@ export class Configuration {
             id: "gameBlocks",
             reference: "gameBlock",
             iterator: "*"
+          }
+        ]
+      },
+      conditionDeclaration: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+          {
+            id: "conditionName",
+            expression: /\?([A-Za-z0-9]+)\s*\{/,
+            groups: ["name"]
+          },
+          {
+            id: "condition",
+            reference: "condition"
+          },
+          {
+            id: "closer",
+            expression: /\}/
           }
         ]
       },
