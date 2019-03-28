@@ -234,9 +234,14 @@ export class Configuration {
             iterator: "*"
           },
           {
+            id: "directLink",
+            reference: "directLink",
+            iterator: "*"
+          }/*,
+          {
             id: "closer",
             expression: /###/
-          }
+          }*/
         ]
       },
       blockId: {
@@ -298,7 +303,7 @@ export class Configuration {
           {
             id: "blockline",
             // exp bizarre
-            expression: /(?!###|\s*\*|\s*\]|\s*\>)(.+?)(?=[\n\r\[\]\<\>])/,
+            expression: /(?!#|\s*\*|\s*\]|\s*\>)(.+?)(?=[\n\r\[\]\<\>])/,
             groups: ["text"]
           }
         ]
@@ -543,6 +548,29 @@ export class Configuration {
           {
             id: "link",
             reference: "link"
+          }
+        ]
+      },
+      directLink: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+          {
+            id: "opener",
+            expression: /\*/
+          },
+          {
+            id: "condition",
+            reference: "conditionInParenthesis",
+            iterator: "?"
+          },
+          {
+            id: "arrow",
+            expression: /->/
+          },
+          {
+            id: "link",
+            reference: "blockId",
+            iterator: "?"
           }
         ]
       },
