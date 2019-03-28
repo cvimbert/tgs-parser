@@ -74,7 +74,7 @@ export class Configuration {
           },
           {
             id: "value",
-            reference: "comparisonMember",
+            reference: "basicArgument",
             iterator: "?"
           },
           {
@@ -89,6 +89,26 @@ export class Configuration {
           {
             id: "equals",
             expression: /=/
+          },
+          {
+            id: "equalsNoOverride",
+            expression: /\(=\)/
+          },
+          {
+            id: "increments",
+            expression: /\+\+/
+          },
+          {
+            id: "decrements",
+            expression: /--/
+          },
+          {
+            id: "adds",
+            expression: /\+=/
+          },
+          {
+            id: "deletes",
+            expression: /-=/
           }
         ]
       },
@@ -216,7 +236,8 @@ export class Configuration {
           },
           {
             id: "localRef",
-            reference: "blockId"
+            reference: "blockId",
+            iterator: "?"
           }
         ]
       },
