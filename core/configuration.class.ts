@@ -303,8 +303,9 @@ export class Configuration {
           {
             id: "blockline",
             // exp bizarre
-            expression: /(?!#|\s*\*|\s*\]|\s*\>)(.+?)(?=[\n\r\[\]\<\>])/,
-            groups: ["text"]
+            expression: /(?!#|\s*\*|\s*\]|\s*\>)(.*?)(?=[\n\r\[\]\<\>])/,
+            groups: ["text"],
+            leaveStartSpaces: false
           }
         ]
       },

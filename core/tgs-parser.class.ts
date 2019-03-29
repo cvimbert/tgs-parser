@@ -39,6 +39,8 @@ export class TGSParser {
       text = text.replace(assertion.expression, "");
     });
 
+    text = text.replace(/^\s*/, "");
+
     let startTime: number = Date.now();
     let res: ParsingResult = this.parseStringAt(text, this.configuration.entry);
     console.log("Evaluated in " + (Date.now() - startTime) + "ms");
@@ -173,7 +175,7 @@ export class TGSParser {
     if (assertion.expression) {
 
       let regExpAdditions: string = "^";
-      regExpAdditions += "\\s*";
+      regExpAdditions += !assertion.leaveStartSpaces ? "\\s*" : "";
 
       let exp = new RegExp(regExpAdditions + assertion.expression.source);
 

@@ -4,5 +4,5 @@ export interface Assertion {
   groups?: string[];
   reference?: string;
   iterator?: string;
-  stripStartSpaces?: boolean;
+  leaveStartSpaces?: boolean;
 }
