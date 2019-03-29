@@ -301,11 +301,15 @@ export class Configuration {
         type: AssertionsGroupType.OR,
         assertions: [
           {
+            id: "doubleLineBreak",
+            expression: /(\s+?(\r\n|\r|\n))?\s+?(\r\n|\r|\n)/,
+            leaveStartSpaces: true
+          },
+          {
             id: "blockline",
-            // exp bizarre
-            expression: /(?!#|\s*\*|\s*\]|\s*\>)(.*?)(?=[\n\r\[\]\<\>])/,
-            groups: ["text"],
-            leaveStartSpaces: false
+            // exp bizarre mais qui marche
+            expression: /(?!#|\s*\*|\s*\]|\s*\>|\s*\r\n)(.*?)(?=[\n\r\[\]\<\>])/,
+            groups: ["text"]
           }
         ]
       },
