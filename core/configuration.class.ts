@@ -542,7 +542,7 @@ export class Configuration {
           },
           {
             id: "simpleLinkText",
-            expression: /(.*)\s*=>/,
+            expression: /(.*)\s*->/,
             groups: ["text"]
           },
           {
@@ -565,7 +565,7 @@ export class Configuration {
           },
           {
             id: "arrow",
-            expression: /->/
+            expression: /=>/
           },
           {
             id: "link",
