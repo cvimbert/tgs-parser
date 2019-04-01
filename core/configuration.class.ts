@@ -320,6 +320,20 @@ export class Configuration {
         ]
       },
       condition: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+          {
+            id: "negation",
+            expression: /!/,
+            iterator: "?"
+          },
+          {
+            id: "conditionGroup",
+            reference: "conditionGroup"
+          }
+        ]
+      },
+      conditionGroup: {
         type: AssertionsGroupType.OR,
         assertions: [
           {
