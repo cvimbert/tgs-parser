@@ -3,6 +3,9 @@ import { AssertionsGroupType } from "./enums/assertions-group-type.enum";
 
 export class Configuration {
 
+  // à affiner
+  static LINE_BREAK = /\r|\n|\r\n|\n\r/;
+
   static mainConfiguration: ParserConfiguration = {
     comments: [
       {
@@ -301,9 +304,12 @@ export class Configuration {
         type: AssertionsGroupType.OR,
         assertions: [
           {
-            id: "doubleLineBreak",
-            expression: /(\s+?(\r\n|\r|\n))?\s+?(\r\n|\r|\n)/,
-            leaveStartSpaces: true
+            id: "simpleBreak",
+            expression: /[\r\n]\s*?[\r\n]/
+          },
+          {
+            id: "doubleBreak",
+            expression: /(?:[\r\n]\s*?)+[\r\n]/
           },
           {
             id: "blockline",
