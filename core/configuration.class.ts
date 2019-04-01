@@ -323,6 +323,10 @@ export class Configuration {
         type: AssertionsGroupType.OR,
         assertions: [
           {
+            id: "block",
+            reference: "blockId"
+          },
+          {
             id: "booleanValue",
             reference: "booleanValue"
           },
