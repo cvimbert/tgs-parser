@@ -304,12 +304,12 @@ export class Configuration {
         type: AssertionsGroupType.OR,
         assertions: [
           {
-            id: "simpleBreak",
-            expression: /[\r\n]\s*?[\r\n]/
+            id: "doubleBreak",
+            expression: /(?:[\r|\n|\n\r](?:[^\n]\s*?)){2,}[\r|\n|\n\r]/
           },
           {
-            id: "doubleBreak",
-            expression: /(?:[\r\n]\s*?)+[\r\n]/
+            id: "simpleBreak",
+            expression: /[\r|\n|\n\r](?:[^\n]\s*?)[\r|\n|\n\r]/
           },
           {
             id: "blockline",
