@@ -653,6 +653,11 @@ export class Configuration {
             expression: /\*/
           },
           {
+            id: "linkDirectives",
+            reference: "linkDirectives",
+            iterator: "?"
+          },
+          {
             id: "condition",
             reference: "conditionInParenthesis",
             iterator: "?"
@@ -665,6 +670,52 @@ export class Configuration {
           {
             id: "link",
             reference: "link"
+          }
+        ]
+      },
+      linkDirectives: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+          {
+            id: "opener",
+            expression: /\[/
+          },
+          {
+            id: "directives",
+            reference: "linkDirective",
+            iterator: "+"
+          },
+          {
+            id: "closer",
+            expression: /\]/
+          }
+        ]
+      },
+      linkDirective: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+          {
+            id: "directive",
+            reference: "linkDirectiveItem"
+          },
+          {
+            id: "separator",
+            expression: /,/,
+            iterator: "?"
+          }
+        ]
+      },
+      linkDirectiveItem: {
+        type: AssertionsGroupType.OR,
+        assertions: [
+          {
+            id: "function",
+            reference: "functionCall"
+          },
+          {
+            id: "basic",
+            expression: /([A-Za-z0-9]+)/,
+            groups: ["name"]
           }
         ]
       },
