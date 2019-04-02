@@ -359,6 +359,26 @@ export class Configuration {
           {
             id: "blockline",
             // exp bizarre mais qui marche
+            reference: "blockLine2"
+          }
+        ]
+      },
+      // nom temporaire
+      blockLine2: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+          {
+            id: "condition",
+            reference: "conditionInParenthesis",
+            iterator: "?"
+          },
+          {
+            id: "format",
+            reference: "formats",
+            iterator: "?"
+          },
+          {
+            id: "blockline",
             expression: /(?!#|\s*\*|\s*\]|\s*\>|\s*\r\n)(.*?)(?=[\n\r\[\]\<\>])/,
             groups: ["text"]
           }
