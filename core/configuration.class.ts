@@ -74,6 +74,10 @@ export class Configuration {
         type: AssertionsGroupType.OR,
         assertions: [
           {
+            id: "function",
+            reference: "functionCall"
+          },
+          {
             id: "commandWithArgs",
             reference: "commandWithArgs"
           },
@@ -154,6 +158,47 @@ export class Configuration {
           {
             id: "closer",
             expression: /;/
+          }
+        ]
+      },
+      functionCall: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+          {
+            id: "functionName",
+            expression: /([A-Za-z0-9]+)/,
+            groups: ["name"]
+          },
+          {
+            id: "leftParenthesis",
+            expression: /\(/
+          },
+          {
+            id: "arguments",
+            reference: "argumentListElement",
+            iterator: "*"
+          },
+          {
+            id: "rightParenthesis",
+            expression: /\)/
+          },
+          {
+            id: "closer",
+            expression: /;/
+          }
+        ]
+      },
+      argumentListElement: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+          {
+            id: "argument",
+            reference: "basicArgument"
+          },
+          {
+            id: "separator",
+            expression: /,/,
+            iterator: "?"
           }
         ]
       },
@@ -319,6 +364,36 @@ export class Configuration {
           }
         ]
       },
+      conditionExpression: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+          {
+            id: "firstMember",
+            reference: "conditionGroup"
+          },
+          {
+            id: "operator",
+            reference: "logicalOperator"
+          },
+          {
+            id: "secondMember"
+          }
+        ]
+      },
+      // nom temporaire
+      conditionElement: {
+        type: AssertionsGroupType.OR,
+        assertions: [
+          {
+            id: "simpleGroup",
+            reference: "conditionGroup"
+          },
+          {
+            id: "parenthesisGroup",
+            reference: "conditionInParenthesis"
+          }
+        ]
+      },
       condition: {
         type: AssertionsGroupType.AND,
         assertions: [
@@ -330,6 +405,19 @@ export class Configuration {
           {
             id: "conditionGroup",
             reference: "conditionGroup"
+          }
+        ]
+      },
+      logicalOperator: {
+        type: AssertionsGroupType.OR,
+        assertions: [
+          {
+            id: "and",
+            expression: /&&/
+          },
+          {
+            id: "or",
+            expression: /\|\|/
           }
         ]
       },
