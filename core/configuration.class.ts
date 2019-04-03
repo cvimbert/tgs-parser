@@ -427,7 +427,7 @@ export class Configuration {
             reference: "conditionLogicalExpression"
           },
           {
-            id: "group",
+            id: "conditionGroup",
             reference: "conditionGroup"
           }
         ]
