@@ -384,36 +384,6 @@ export class Configuration {
           }
         ]
       },
-      conditionExpression: {
-        type: AssertionsGroupType.AND,
-        assertions: [
-          {
-            id: "firstMember",
-            reference: "conditionGroup"
-          },
-          {
-            id: "operator",
-            reference: "logicalOperator"
-          },
-          {
-            id: "secondMember"
-          }
-        ]
-      },
-      // nom temporaire
-      conditionElement: {
-        type: AssertionsGroupType.OR,
-        assertions: [
-          {
-            id: "simpleGroup",
-            reference: "conditionGroup"
-          },
-          {
-            id: "parenthesisGroup",
-            reference: "conditionInParenthesis"
-          }
-        ]
-      },
       condition: {
         type: AssertionsGroupType.AND,
         assertions: [
@@ -425,6 +395,57 @@ export class Configuration {
           {
             id: "conditionGroup",
             reference: "conditionGroup"
+          }
+        ]
+      },
+      conditionLogicalExpression: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+          {
+            id: "operand1",
+            reference: "conditionGroup"
+          },
+          {
+            id: "operator",
+            reference: "logicalOperator"
+          },
+          {
+            id: "operand2",
+            reference: "conditionMember"
+          }
+        ]
+      },
+      conditionMember: {
+        type: AssertionsGroupType.OR,
+        assertions: [
+          {
+            id: "expressionInParenthesis",
+            reference: "conditionLogicalExpressionInParenthesis"
+          },
+          {
+            id: "expression",
+            reference: "conditionLogicalExpression"
+          },
+          {
+            id: "group",
+            reference: "conditionGroup"
+          }
+        ]
+      },
+      conditionLogicalExpressionInParenthesis: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+          {
+            id: "opener",
+            expression: /\(/
+          },
+          {
+            id: "expression",
+            reference: "conditionLogicalExpression",
+          },
+          {
+            id: "closer",
+            expression: /\)/
           }
         ]
       },
@@ -771,7 +792,7 @@ export class Configuration {
           },
           {
             id: "conditionBody",
-            reference: "condition",
+            reference: "conditionMember",
           },
           {
             id: "closer",
