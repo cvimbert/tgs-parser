@@ -73,6 +73,10 @@ export class ParsingResult {
     }
   }
 
+  hasKey(keyName: string): boolean {
+    return;
+  }
+
   getFirstResult(path: string): ParsingResult {
     let results: ParsingResult[] = this.getResults(path);
     return results ? results[0] : null;

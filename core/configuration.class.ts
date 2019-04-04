@@ -48,7 +48,7 @@ export class Configuration {
           },
           {
             id: "condition",
-            reference: "condition"
+            reference: "conditionMember"
           },
           {
             id: "closer",
@@ -211,7 +211,7 @@ export class Configuration {
           },
           {
             id: "condition",
-            reference: "condition"
+            reference: "conditionMember"
           },
           {
             id: "closer",
@@ -384,20 +384,6 @@ export class Configuration {
           }
         ]
       },
-      condition: {
-        type: AssertionsGroupType.AND,
-        assertions: [
-          {
-            id: "negation",
-            expression: /!/,
-            iterator: "?"
-          },
-          {
-            id: "conditionGroup",
-            reference: "conditionGroup"
-          }
-        ]
-      },
       conditionLogicalExpression: {
         type: AssertionsGroupType.AND,
         assertions: [
@@ -416,6 +402,20 @@ export class Configuration {
         ]
       },
       conditionMember: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+          {
+            id: "negated",
+            expression: /!/,
+            iterator: "?"
+          },
+          {
+            id: "element",
+            reference: "conditionMemberElement"
+          }
+        ]
+      },
+      conditionMemberElement: {
         type: AssertionsGroupType.OR,
         assertions: [
           {
