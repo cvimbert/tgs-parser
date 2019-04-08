@@ -285,11 +285,44 @@ export class Configuration {
             id: "directLink",
             reference: "directLink",
             iterator: "*"
-          }/*,
+          }
+        ]
+      },
+      nestedGameBlock: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+          {
+            id: "opener",
+            expression: /##/
+          },
+          {
+            id: "blockId",
+            reference: "blockId"
+          },
+          {
+            id: "scripts",
+            reference: "script",
+            iterator: "*"
+          },
+          {
+            id: "blockLines",
+            reference: "complexTextBlock",
+            iterator: "*"
+          },
+          {
+            id: "blockLinks",
+            reference: "blockLink",
+            iterator: "*"
+          },
+          {
+            id: "directLink",
+            reference: "directLink",
+            iterator: "*"
+          },
           {
             id: "closer",
-            expression: /###/
-          }*/
+            expression: /##/
+          }
         ]
       },
       blockId: {
@@ -705,12 +738,18 @@ export class Configuration {
           },
           {
             id: "simpleLinkText",
-            expression: /(.*)\s*->/,
+            expression: /(.*?)\s*->/,
             groups: ["text"]
           },
           {
             id: "link",
-            reference: "link"
+            reference: "link",
+            iterator: "?"
+          },
+          {
+            id: "nestedBlock",
+            reference: "nestedGameBlock",
+            iterator: "?"
           }
         ]
       },
