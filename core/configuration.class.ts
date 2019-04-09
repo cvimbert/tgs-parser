@@ -277,13 +277,13 @@ export class Configuration {
             iterator: "*"
           },
           {
-            id: "blockLinks",
-            reference: "blockLink",
+            id: "directLink",
+            reference: "directLink",
             iterator: "*"
           },
           {
-            id: "directLink",
-            reference: "directLink",
+            id: "blockLinks",
+            reference: "blockLink",
             iterator: "*"
           }
         ]
