@@ -291,13 +291,13 @@ export class Configuration {
       nestedGameBlock: {
         type: AssertionsGroupType.AND,
         assertions: [
-          {
+          /*{
             id: "opener",
             expression: /##/
-          },
+          },*/
           {
             id: "blockId",
-            reference: "blockId"
+            reference: "nestedBlockId"
           },
           {
             id: "scripts",
@@ -330,6 +330,15 @@ export class Configuration {
           {
             id: "blockId",
             expression: /\#([A-Za-z0-9]+)/,
+            groups: ["id"]
+          }
+        ]
+      },
+      nestedBlockId: {
+        assertions: [
+          {
+            id: "blockId",
+            expression: /\#\#([A-Za-z0-9]+)/,
             groups: ["id"]
           }
         ]
