@@ -3,9 +3,19 @@ export class ParsingResult {
   groups: {[key: string]: string};
   results: {[key: string]: ParsingResult[]};
 
+  startIndex: number;
+
   constructor(
-    public index: number
-  ) {}
+    public index?: number
+  ) {
+    if (index !== undefined) {
+      this.startIndex = index;
+    }
+  }
+
+  get endIndex(): number {
+    return this.index;
+  }
 
   addGroupResult(groupName: string, value: string) {
     if (!this.groups) {
@@ -20,10 +30,15 @@ export class ParsingResult {
       this.results = {};
     }
 
-    //if (results.length > 0) {
-      this.results[assertionName] = results;
-      this.index = results.length > 0 ? results[results.length - 1].index : 0;
-    //}
+    this.results[assertionName] = results;
+
+    let newIndex: number = results.length > 0 ? results[results.length - 1].index : 0;
+
+    if (this.startIndex === undefined) {
+      this.startIndex = newIndex;
+    }
+
+    this.index = newIndex
   }
 
   getValueAtKey(key: string): string {

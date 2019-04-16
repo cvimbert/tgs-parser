@@ -50,8 +50,10 @@ export class TGSParser {
   parseStringAt(text: string, dictionaryTerm: string, index: number = 0): ParsingResult {
     let group: AssertionsGroup = this.configuration.dictionary[dictionaryTerm];
 
+    //console.log(index);
+
     // pas possible de trouver un id pour le moment. D'ailleurs id pas nécessaire normalement.
-    let globalResult: ParsingResult = new ParsingResult(0);
+    let globalResult: ParsingResult = new ParsingResult();
 
     // on parcourt chacune des assertions du groupe. Si l'une des assertions est ok
     // (elle retourne un tableau de ParsingResult non null, on continue, récursivement)
@@ -183,6 +185,9 @@ export class TGSParser {
 
       if (expRes) {
         let newIndex: number = index + expRes[0].length;
+
+        //console.log(newIndex, index);
+
         let res = new ParsingResult(newIndex);
 
         if (assertion.groups) {
