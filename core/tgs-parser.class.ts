@@ -50,6 +50,7 @@ export class TGSParser {
   parseStringAt(text: string, dictionaryTerm: string, index: number = 0): ParsingResult {
     let group: AssertionsGroup = this.configuration.dictionary[dictionaryTerm];
 
+    // à voir....
     /*while(text.charAt(index).match(/\s/)) {
       index++;
     }*/
