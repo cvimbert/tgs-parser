@@ -50,9 +50,9 @@ export class TGSParser {
   parseStringAt(text: string, dictionaryTerm: string, index: number = 0): ParsingResult {
     let group: AssertionsGroup = this.configuration.dictionary[dictionaryTerm];
 
-    while(text.charAt(index).match(/\s/)) {
+    /*while(text.charAt(index).match(/\s/)) {
       index++;
-    }
+    }*/
 
     // pas possible de trouver un id pour le moment. D'ailleurs id pas nécessaire normalement.
     let globalResult: ParsingResult = new ParsingResult(index);
