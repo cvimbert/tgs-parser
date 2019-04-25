@@ -356,6 +356,10 @@ export class Configuration {
             id: "localRef",
             reference: "blockId",
             iterator: "?"
+          },
+          {
+            id: "close",
+            expression: /\n|\r|\r\n/
           }
         ]
       },

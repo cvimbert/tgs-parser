@@ -56,7 +56,7 @@ export class TGSParser {
     }*/
 
     // pas possible de trouver un id pour le moment. D'ailleurs id pas nécessaire normalement.
-    let globalResult: ParsingResult = new ParsingResult(index);
+    let globalResult: ParsingResult = new ParsingResult(text, index);
 
     // on parcourt chacune des assertions du groupe. Si l'une des assertions est ok
     // (elle retourne un tableau de ParsingResult non null, on continue, récursivement)
@@ -191,7 +191,7 @@ export class TGSParser {
 
         //console.log(newIndex, index);
 
-        let res = new ParsingResult(newIndex);
+        let res = new ParsingResult(text, newIndex);
 
         if (assertion.groups) {
           for (let i = 1; i < expRes.length; i++) {

@@ -6,6 +6,7 @@ export class ParsingResult {
   startIndex: number;
 
   constructor(
+    public originalString?: string,
     public index?: number
   ) {
     if (index !== undefined) {
