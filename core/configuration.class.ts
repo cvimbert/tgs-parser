@@ -334,12 +334,31 @@ export class Configuration {
           }
         ]
       },
+      blockIdEOL: {
+        assertions: [
+          {
+            id: "blockId",
+            expression: /\#([A-Za-z0-9]+)[\n\r]/,
+            groups: ["id"]
+          }
+        ]
+      },
       nestedBlockId: {
         assertions: [
           {
             id: "blockId",
             expression: /\#\#([A-Za-z0-9]+)/,
             groups: ["id"]
+          }
+        ]
+      },
+      slink: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+          {
+            id: "ref",
+            expression: /([A-Za-z0-9-/]+)?(?:#([A-Za-z0-9-]+))?/,
+            groups: ["globalRef", "localRef"]
           }
         ]
       },
@@ -356,10 +375,6 @@ export class Configuration {
             id: "localRef",
             reference: "blockId",
             iterator: "?"
-          },
-          {
-            id: "close",
-            expression: /\n|\r|\r\n/
           }
         ]
       },
@@ -756,7 +771,7 @@ export class Configuration {
           },
           {
             id: "link",
-            reference: "link",
+            reference: "slink",
             iterator: "?"
           },
           {
