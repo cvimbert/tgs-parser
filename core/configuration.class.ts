@@ -855,7 +855,7 @@ export class Configuration {
         assertions: [
           {
             id: "opener",
-            expression: /\(/
+            expression: /\(\?/
           },
           {
             id: "conditionBody",
