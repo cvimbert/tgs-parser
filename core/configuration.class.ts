@@ -411,10 +411,6 @@ export class Configuration {
         assertions: [
           {
             id: "doubleBreak",
-            expression: /(?:[\r|\n|\n\r](?:[^\n]\s*?)){2,}[\r|\n|\n\r]/
-          },
-          {
-            id: "simpleBreak",
             expression: /[\r|\n|\n\r](?:[^\n]\s*?)[\r|\n|\n\r]/
           },
           {
