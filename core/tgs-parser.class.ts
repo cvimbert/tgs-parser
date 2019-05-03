@@ -43,7 +43,7 @@ export class TGSParser {
 
     let startTime: number = Date.now();
     let res: ParsingResult = this.parseStringAt(text, this.configuration.entry);
-    console.log("Evaluated in " + (Date.now() - startTime) + "ms");
+    // console.log("Evaluated in " + (Date.now() - startTime) + "ms");
     return res;
   }
 
