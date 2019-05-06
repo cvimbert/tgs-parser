@@ -267,6 +267,11 @@ export class Configuration {
             reference: "blockId"
           },
           {
+            id: "modifiers",
+            reference: "blockModifier",
+            iterator: "*"
+          },
+          {
             id: "scripts",
             reference: "script",
             iterator: "*"
@@ -285,6 +290,21 @@ export class Configuration {
             id: "blockLinks",
             reference: "blockLink",
             iterator: "*"
+          }
+        ]
+      },
+      blockModifier: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+          {
+            id: "modifierName",
+            expression: /([A-Za-z]+):/,
+            groups: ["name"]
+          },
+          {
+            id: "blockId",
+            reference: "blockId",
+            iterator: "+"
           }
         ]
       },
