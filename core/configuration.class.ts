@@ -184,7 +184,8 @@ export class Configuration {
           },
           {
             id: "closer",
-            expression: /;/
+            expression: /;/,
+            iterator: "?"
           }
         ]
       },
@@ -608,6 +609,10 @@ export class Configuration {
       basicArgument: {
         type: AssertionsGroupType.OR,
         assertions: [
+          {
+            id: "function",
+            reference: "functionCall"
+          },
           {
             id: "boolean",
             reference: "booleanRawValue"
