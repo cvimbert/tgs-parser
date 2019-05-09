@@ -22,19 +22,26 @@ export class Configuration {
         type: AssertionsGroupType.AND,
         assertions: [
           {
-            id: "conditions",
+            id: "items",
+            reference: "structureElement",
+            iterator: "*"
+          }
+        ]
+      },
+      structureElement: {
+        type: AssertionsGroupType.OR,
+        assertions: [
+          {
+            id: "condition",
             reference: "conditionDeclaration",
-            iterator: "*"
           },
           {
-            id: "scripts",
+            id: "script",
             reference: "script",
-            iterator: "*"
           },
           {
-            id: "gameBlocks",
+            id: "gameBlock",
             reference: "gameBlock",
-            iterator: "*"
           }
         ]
       },
@@ -291,14 +298,22 @@ export class Configuration {
             iterator: "*"
           },
           {
+            id: "linkItems",
+            reference: "linkItem",
+            iterator: "*"
+          }
+        ]
+      },
+      linkItem: {
+        type: AssertionsGroupType.OR,
+        assertions: [
+          {
             id: "directLink",
             reference: "directLink",
-            iterator: "*"
           },
           {
-            id: "blockLinks",
+            id: "blockLink",
             reference: "blockLink",
-            iterator: "*"
           }
         ]
       },
@@ -784,14 +799,9 @@ export class Configuration {
             expression: /\*/
           },
           {
-            id: "linkDirectives",
-            reference: "linkDirectives",
-            iterator: "?"
-          },
-          {
-            id: "condition",
-            reference: "conditionInParenthesis",
-            iterator: "?"
+            id: "modifiers",
+            reference: "linkModifierItem",
+            iterator: "*"
           },
           {
             id: "simpleLinkText",
@@ -807,6 +817,19 @@ export class Configuration {
             id: "nestedBlock",
             reference: "nestedGameBlock",
             iterator: "?"
+          }
+        ]
+      },
+      linkModifierItem: {
+        type: AssertionsGroupType.OR,
+        assertions: [
+          {
+            id: "linkDirective",
+            reference: "linkDirectives",
+          },
+          {
+            id: "condition",
+            reference: "conditionInParenthesis",
           }
         ]
       },
