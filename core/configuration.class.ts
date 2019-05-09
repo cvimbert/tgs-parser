@@ -75,7 +75,7 @@ export class Configuration {
         assertions: [
           {
             id: "function",
-            reference: "functionCall"
+            reference: "functionInstruction"
           },
           {
             id: "commandWithArgs",
@@ -88,6 +88,19 @@ export class Configuration {
           {
             id: "assignation",
             reference: "assignation"
+          }
+        ]
+      },
+      functionInstruction: {
+        type: AssertionsGroupType.AND,
+        assertions: [
+          {
+            id: "functionBody",
+            reference: "functionCall"
+          },
+          {
+            id: "closer",
+            expression: /;/
           }
         ]
       },
@@ -181,11 +194,6 @@ export class Configuration {
           {
             id: "rightParenthesis",
             expression: /\)/
-          },
-          {
-            id: "closer",
-            expression: /;/,
-            iterator: "?"
           }
         ]
       },
@@ -616,7 +624,7 @@ export class Configuration {
           {
             id: "boolean",
             reference: "booleanRawValue"
-          },
+          },  
           {
             id: "number",
             reference: "numberRawValue"
@@ -687,20 +695,20 @@ export class Configuration {
             expression: /!=/
           },
           {
-            id: "superiorTo",
-            expression: /\>/
-          },
-          {
-            id: "inferiorTo",
-            expression: /\</
-          },
-          {
             id: "superiorOrEqualsTo",
             expression: /\>=/
           },
           {
             id: "inferiorOrEqualsTo",
             expression: /\<=/
+          },
+          {
+            id: "superiorTo",
+            expression: /\>/
+          },
+          {
+            id: "inferiorTo",
+            expression: /\</
           }
         ]
       },
