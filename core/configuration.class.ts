@@ -10,11 +10,11 @@ export class Configuration {
     comments: [
       {
         id: "commentedLine",
-        expression: /\/\/.*?[\r\n]/g
+        expression: /(?:\/\/.*?\r?\n|\r)*/
       },
       {
         id: "commentedBlock",
-        expression: /\/\*.*?\*\//g
+        expression: /(?:\/\*.*?\*\/)*/
       }
     ],
     dictionary: {

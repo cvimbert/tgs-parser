@@ -187,6 +187,16 @@ export class TGSParser {
       let regExpAdditions: string = "^";
       regExpAdditions += !assertion.leaveStartSpaces ? "\\s*" : "";
 
+      // strip comments
+
+      // pas bon du tout !!!
+      
+      this.configuration.comments.forEach(comment => {
+        regExpAdditions += comment.expression.source;
+      });
+
+      regExpAdditions += !assertion.leaveStartSpaces ? "\\s*" : "";
+
       let exp = new RegExp(regExpAdditions + assertion.expression.source);
 
       let expRes: RegExpExecArray = exp.exec(croppedText);
