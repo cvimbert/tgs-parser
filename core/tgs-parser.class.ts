@@ -34,12 +34,15 @@ export class TGSParser {
 
   parseTGSString(text: string): ParsingResult {
 
-    // comments stripping
-    this.configuration.comments.forEach(assertion => {
+    // comments stripping (à déplacer)
+    /*this.configuration.comments.forEach(assertion => {
       text = text.replace(assertion.expression, "");
-    });
+    });*/
 
-    text = text.replace(/^\s*/, "");
+    // pas bon
+    //text = text.replace(/^\s*/, "");
+
+    text = text.replace(/\r?\n|\r/g, "\n");
 
     let startTime: number = Date.now();
     let res: ParsingResult = this.parseStringAt(text, this.configuration.entry);
@@ -50,13 +53,15 @@ export class TGSParser {
   parseStringAt(text: string, dictionaryTerm: string, index: number = 0): ParsingResult {
     let group: AssertionsGroup = this.configuration.dictionary[dictionaryTerm];
 
-    // à voir....
-    /*while(text.charAt(index).match(/\s/)) {
-      index++;
-    }*/
-
     // pas possible de trouver un id pour le moment. D'ailleurs id pas nécessaire normalement.
     let globalResult: ParsingResult = new ParsingResult(text, index);
+
+    let cc = text.charAt(index);
+
+    while(cc && cc.match(/\s/)) {
+      index++;
+      cc = text.charAt(index);
+    }
 
     // on parcourt chacune des assertions du groupe. Si l'une des assertions est ok
     // (elle retourne un tableau de ParsingResult non null, on continue, récursivement)
