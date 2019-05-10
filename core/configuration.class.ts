@@ -764,6 +764,11 @@ export class Configuration {
             iterator: "?"
           },
           {
+            id: "scripts",
+            reference: "script",
+            iterator: "*"
+          },
+          {
             id: "blocks",
             reference: "complexTextBlock",
             iterator: "*"
@@ -771,6 +776,20 @@ export class Configuration {
           {
             id: "closer",
             expression: /\]/
+          }
+        ]
+      },
+      // A implémenter
+      conditionalBlockModifierItem: {
+        type: AssertionsGroupType.OR,
+        assertions: [
+          {
+            id: "condition",
+            reference: "conditionInParenthesis",
+          },
+          {
+            id: "condition",
+            reference: "conditionInParenthesis",
           }
         ]
       },
