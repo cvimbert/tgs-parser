@@ -3,9 +3,6 @@ import { AssertionsGroupType } from "./enums/assertions-group-type.enum";
 
 export class Configuration {
 
-  // à affiner
-  static LINE_BREAK = /\r|\n|\r\n|\n\r/;
-
   static mainConfiguration: ParserConfiguration = {
     comments: [
       {
